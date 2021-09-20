@@ -1,0 +1,65 @@
+package myjsoup;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+public class FirstLink {
+
+	public static void main(String[] args) throws IOException {
+
+		int Count = 0, NumberOfReachedLinks = 0;
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter the number of url's : ");
+		int NumberOfLinks = sc.nextInt();
+		List<String> list = new ArrayList<String>();
+
+		for (int i = 0; i < NumberOfLinks; i++) {
+			System.out.print("Enter a string: ");
+			String InputString = sc.next();
+			list.add(InputString);
+			InputString="";
+		}
+		sc.close();
+
+		for (int j = 0; j < list.size(); j++) {
+			String NewUrl = list.get(j);
+
+			for (int k = 0; k < 100; k++) {
+				Document doc = Jsoup.connect(NewUrl).get();
+				Elements links = doc.select("p > a[href]");
+
+				for (Element link : links) {
+					for (int l = 0; l < link.text().length(); l++) {
+						if (link.text().charAt(l) == '[' || link.text().charAt(l) == '('
+								|| link.text().charAt(l) == '{') {
+							Count = Count + 1;
+						}
+					}
+
+					if (link.text() != "" && Count == 0) {
+						NewUrl = link.attr("abs:href").toString();
+						// System.out.println(NewUrl);
+						break;
+					}
+					Count = 0;
+
+				}
+				if (NewUrl.contains("Philosophy")) {
+					// System.out.println("Reached Philosophy");
+					NumberOfReachedLinks += 1;
+					break;
+
+				}
+
+			}
+		}
+		System.out.println(NumberOfReachedLinks + " out of given " + NumberOfLinks + " links reached Philosophy");
+	}
+}
