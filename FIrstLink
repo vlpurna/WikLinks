@@ -1,0 +1,61 @@
+package myjsoup;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+public class FIrstLink {
+
+	public static void main(String[] args) throws IOException{
+		
+		//String new_url="https://en.wikipedia.org/wiki/India";
+		
+		int count=0;
+		
+		
+		List<String> l=new ArrayList<String>();
+        l.add("https://en.wikipedia.org/wiki/India");
+        l.add("https://en.wikipedia.org/wiki/One_Direction");
+         
+       for(int h=0;h<l.size();h++) {
+    	  String new_url=l.get(h);
+        for(int k=0;k<100;k++) {
+        	
+        Document doc = Jsoup.connect(new_url).get();
+		Elements links = doc.select("p > a[href]");
+	
+		for(Element link : links) {
+			
+			for (int i = 0; i < link.text().length(); i++) {
+				 
+	            if(link.text().charAt(i)=='[' || link.text().charAt(i)=='(' || link.text().charAt(i)=='{'){
+	            	count=count+1;
+	            }
+	        }
+			
+			
+			if(link.text()!="" && count==0) {
+				new_url=link.attr("abs:href").toString();
+			System.out.println(new_url);
+			break;
+			}
+			count=0;
+			
+		
+        }
+		if (new_url.contains("Philosophy")) {
+            System.out.println("Reached Philosophy");
+            break;
+		
+	    }
+
+	  }
+       }
+	}
+}
+
+
