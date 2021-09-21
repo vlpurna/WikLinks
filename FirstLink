@@ -1,7 +1,10 @@
 package myjsoup;
 
+package myjsoup;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -10,56 +13,66 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class FirstLink {
+public class FirstLink{
 
-	public static void main(String[] args) throws IOException {
+public static void main(String[] args) throws IOException {
 
-		int Count = 0, NumberOfReachedLinks = 0;
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter the number of url's : ");
-		int NumberOfLinks = sc.nextInt();
-		List<String> list = new ArrayList<String>();
+int Count = 0, NumberOfReachedLinks = 0, NumberOfSteps = 0;
+Scanner sc = new Scanner(System.in);
+System.out.println("Enter the number of url's : ");
+int NumberOfLinks = sc.nextInt();
+List<String> ListOfUrls = new ArrayList<String>();
+List<Integer> NumberOfStepsList = new ArrayList<Integer>();
 
-		for (int i = 0; i < NumberOfLinks; i++) {
-			System.out.print("Enter a string: ");
-			String InputString = sc.next();
-			list.add(InputString);
-			InputString="";
-		}
-		sc.close();
+for (int i = 0; i < NumberOfLinks; i++) {
+System.out.print("Enter a string: ");
+String InputString = sc.next();
+ListOfUrls.add(InputString);
+InputString = "";
+}
+sc.close();
 
-		for (int j = 0; j < list.size(); j++) {
-			String NewUrl = list.get(j);
+for (int j = 0; j < ListOfUrls.size(); j++) {
+String NewUrl = ListOfUrls.get(j);
 
-			for (int k = 0; k < 100; k++) {
-				Document doc = Jsoup.connect(NewUrl).get();
-				Elements links = doc.select("p > a[href]");
+for (int k = 0; k < 100; k++) {
+Document doc = Jsoup.connect(NewUrl).get();
+Elements links = doc.select("p > a[href]");
 
-				for (Element link : links) {
-					for (int l = 0; l < link.text().length(); l++) {
-						if (link.text().charAt(l) == '[' || link.text().charAt(l) == '('
-								|| link.text().charAt(l) == '{') {
-							Count = Count + 1;
-						}
-					}
+for (Element link : links) {
+for (int l = 0; l < link.text().length(); l++) {
+if (link.text().charAt(l) == '[' || link.text().charAt(l) == '('
+|| link.text().charAt(l) == '{') {
+Count = Count + 1;
+}
+}
 
-					if (link.text() != "" && Count == 0) {
-						NewUrl = link.attr("abs:href").toString();
-						// System.out.println(NewUrl);
-						break;
-					}
-					Count = 0;
+if (link.text() != "" && Count == 0) {
+NewUrl = link.attr("abs:href").toString();
+NumberOfSteps = NumberOfSteps + 1;
+// System.out.println(NewUrl);
+break;
+}
+Count = 0;
 
-				}
-				if (NewUrl.contains("Philosophy")) {
-					// System.out.println("Reached Philosophy");
-					NumberOfReachedLinks += 1;
-					break;
+}
+if (NewUrl.contains("Philosophy")) {
+// System.out.println("Reached Philosophy");
+NumberOfReachedLinks += 1;
+NumberOfStepsList.add(NumberOfSteps);
+break;
 
-				}
+}
 
-			}
-		}
-		System.out.println(NumberOfReachedLinks + " out of given " + NumberOfLinks + " links reached Philosophy");
-	}
+}
+             if(!(NewUrl.contains("Philosophy"))) {
+            NumberOfStepsList.add(0);
+             }
+NumberOfSteps = 0;
+}
+System.out.println(NumberOfReachedLinks + " out of given " + NumberOfLinks + " links reached Philosophy");
+System.out.println("The number of steps taken respectively are(Prints 0 if not reached):");
+System.out.println(Arrays.deepToString(NumberOfStepsList.toArray()));
+
+}
 }
