@@ -1,0 +1,69 @@
+package custom;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class PrimeListCustom<E> extends ArrayList<E> {
+
+	private static final long serialVersionUID = 1L;
+
+	public boolean isPrime(Integer e) {
+		int InputNumber = (int) e;
+		boolean flag = false;
+		for (int i = 2; i <= InputNumber / 2; ++i) {
+
+			if (InputNumber % i == 0) {
+				flag = true;
+				break;
+			}
+		}
+		if (!flag)
+			return true;
+		else
+			return false;
+	}
+
+	public boolean add(E e) {
+		int Number = (int) e;
+		if (isPrime(Number)) {
+			return super.add(e);
+		}
+		return false;
+	}
+
+	public E remove(int e) {
+		return super.remove(e);
+	}
+
+	public void add(int index, E e) {
+		if (isPrime((int) e)) {
+			super.add(index, e);
+		}
+		
+	}
+
+	public int size() {
+		return super.size();
+	}
+
+	public E set(int index, E e) {
+		if (isPrime((int) e)) {
+			return super.set(index, e);
+		}
+		return e;
+	}
+
+	public static void main(String[] args) {
+		PrimeListCustom<Integer> list = new PrimeListCustom<>();
+		list.add(1);
+		list.add(3);
+		list.add(5);
+		list.add(4);
+		list.add(1, 5);
+		list.remove(0);
+		System.out.println(list.size());
+		list.set(1, 6);
+		System.out.println(Arrays.deepToString(list.toArray()));
+	}
+
+}
