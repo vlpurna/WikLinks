@@ -1,0 +1,52 @@
+package custom;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class NegativeListCustom<E> extends ArrayList<E> {
+
+	private static final long serialVersionUID = 1L;
+
+	public boolean add(E e) {
+		int Number = (int) e;
+		if (Number < 0) {
+			return super.add(e);
+		}
+		return false;
+	}
+
+	public E remove(int e) {
+		return super.remove(e);
+	}
+
+	public void add(int index, E e) {
+		if ((int)e < 0) {
+			super.add(index, e);
+		}
+	}
+
+	public int size() {
+		return super.size();
+	}
+
+	public E set(int index, E e) {
+		if ((int) e < 0) {
+			return super.set(index, e);
+		}
+		return e;
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		NegativeListCustom<Integer> list = new NegativeListCustom<Integer>();
+		list.add(1);
+		list.add(-3);
+		list.add(5);
+		list.add(4);
+		list.set(0, -1);
+		System.out.println(list.size());
+		System.out.println(Arrays.deepToString(list.toArray()));
+
+	}
+
+}
