@@ -1,0 +1,53 @@
+package custom;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
+
+@SuppressWarnings("unused")
+class SecondJunit5Test {
+
+	@Test
+	@DisabledOnOs(OS.WINDOWS)
+	void test() {
+		//fail("Not yet implemented");
+		System.out.println("Test");
+	}
+
+	@Test
+	@Tag("Important")
+	@EnabledOnOs(OS.WINDOWS)
+	void test1() {
+		//fail("Not yet implemented");
+		System.out.println("Test 1");
+	}
+	
+	@Nested
+	class Nest{
+		@Test
+		void test2() {
+			//System.out.println("Nest 1");
+			PrimeListCustom<Integer> list = new PrimeListCustom<>();
+			list.add(1);
+			int s=list.size();
+			assertEquals(1,s,"Should return the right size");
+		}
+		@Test
+		void test3() {
+			//System.out.println("Nest 2");
+			PrimeListCustom<Integer> list = new PrimeListCustom<>();
+			list.add(1);
+			int s=list.size();
+			//assertEquals(2,s,"Should return the right size");
+			assertAll(
+					() -> assertEquals(1,s,"Should return the right size"),
+					() -> assertEquals(2,s,"Should return the right size")
+					);
+		}
+	}
+}
