@@ -1,0 +1,88 @@
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+import org.jsoup.nodes.Element;
+
+public class WikiLinkFinal {
+	public static String bracketElements(String inputString) {
+		String str1 = "";
+		List<String> matchList = new ArrayList<String>();
+		Pattern regex = Pattern.compile("\\((.*?)\\)");
+		Matcher regexMatcher = regex.matcher(inputString);
+
+		while (regexMatcher.find()) {// Finds Matching Pattern in String
+			matchList.add(regexMatcher.group(1));// Fetching Group from String
+		}
+
+		for (String str : matchList) {
+			// System.out.println(str);
+			str1 = str1 + str;
+		}
+		return str1;
+	}
+
+	public static boolean removeBracketElements(String inputString, String element) {
+		if (inputString.contains(element)) {
+			return true;
+		}
+		return false;
+	}
+
+	public static void main(String[] args) throws IOException {
+
+		String newLink = "https://en.wikipedia.org/wiki/India";
+		int numberOfSteps = 0;
+		for (int i = 0; i < 100; i++) {
+			Document document = Jsoup.connect(newLink).get();
+			int paragraphCount = 0;
+			boolean linkCame = false, philosophyReached = false;
+			String paraString = "";
+			Elements paragraph = document.select("p");
+			for (Element para : paragraph) {
+				// System.out.println(para.text());
+				paraString = paraString + para.text();
+				paragraphCount = paragraphCount + 1;
+				if (para.text() != "") {
+					Elements insidePara = para.select("*");
+					for (Element elementInsidePara : insidePara) {
+						if (elementInsidePara.tagName() != "sup" && elementInsidePara.tagName() != "i"
+								&& elementInsidePara.tagName() == "a") {
+							if (elementInsidePara.text() != "" && !(elementInsidePara.text().contains("["))
+									&& !(elementInsidePara.text().contains("/"))) {
+								if (!removeBracketElements(bracketElements(paraString), elementInsidePara.text())) {
+									linkCame = true;
+									// System.out.println(elementInsidePara.text());
+									newLink = elementInsidePara.attr("abs:href");
+									// System.out.println(newLink);
+									numberOfSteps = numberOfSteps + 1;
+									if (elementInsidePara.text().equals("philosophy")) {
+										philosophyReached = true;
+									}
+									break;
+								}
+							}
+						}
+					}
+					if (linkCame) {
+						break;
+					}
+				}
+				if (paragraphCount == 10) {
+					break;
+				}
+
+			}
+			if (philosophyReached) {
+				System.out.println("Reached Philosophy in " + numberOfSteps + " steps");
+				break;
+			}
+		}
+		// System.out.println(bracketElements(paraString));
+	}
+}
