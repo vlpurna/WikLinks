@@ -1,0 +1,76 @@
+package custom;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+@SuppressWarnings("unused")
+class FirstJunit5Test {
+
+	@BeforeAll
+	public static void setUpBeforeClass() throws Exception {
+		System.out.println("before all");
+	}
+
+	@BeforeEach
+	public void setUp() throws Exception {
+		System.out.println("before");
+	}
+
+	@Test
+	@Disabled
+	void test1() {
+		// fail("Not yet implemented");
+		NegativeListCustom<Integer> list = new NegativeListCustom<Integer>();
+		list.add(-3);
+		System.out.print(list.size());
+		System.out.println(" test 1");
+	}
+
+	@Test
+	@DisplayName("This is Test2")
+	@Tag("Important")
+	void test2() {
+		// fail("Not yet implemented");
+		PrimeListCustom<Integer> list = new PrimeListCustom<>();
+		list.add(1);
+		System.out.print(list.size());
+		System.out.println(" test 2");
+	}
+
+	@RepeatedTest(2)
+	void test3() {
+		// fail("Not yet implemented");
+		PrimeListCustom<Integer> list = new PrimeListCustom<>();
+		list.add(1);
+		System.out.print(list.size());
+		System.out.print(" Test 3 repeated twice");
+	}
+
+	@AfterEach
+	public void tearDown() throws Exception {
+		System.out.println("after");
+	}
+
+	@AfterAll
+	public static void tearDownAfterClass() throws Exception {
+		System.out.println("after all");
+	}
+
+}
